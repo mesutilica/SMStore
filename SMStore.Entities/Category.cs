@@ -21,6 +21,10 @@ namespace SMStore.Entities
         public int OrderNo { get; set; }
         [Display(Name = "Eklenme Tarihi"), ScaffoldColumn(false)]
         public DateTime? CreateDate { get; set; } = DateTime.Now;
-
+        public virtual ICollection<Product> Products { get; set; } // 1 kategorinin 1 den çok ürünü olabilir. 1 e çok ilişki kurduk
+        public Category()
+        {
+            Products = new List<Product>();
+        }
     }
 }
