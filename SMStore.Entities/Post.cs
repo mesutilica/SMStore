@@ -2,7 +2,7 @@
 
 namespace SMStore.Entities
 {
-    public class Category : IEntity
+    public class Post : IEntity
     {
         public int Id { get; set; }
         [Display(Name = "Adı"), Required(ErrorMessage = "{0} Alanı Boş Geçilemez!")]
@@ -13,14 +13,7 @@ namespace SMStore.Entities
         public string? Image { get; set; }
         [Display(Name = "Aktif?")]
         public bool IsActive { get; set; }
-        [Display(Name = "Üst Menü?")]
-        public bool IsTopMenu { get; set; }
-        [Display(Name = "Üst Kategori")]
-        public int ParentId { get; set; }
-        [Display(Name = "Sıra No")]
-        public int OrderNo { get; set; }
         [Display(Name = "Eklenme Tarihi"), ScaffoldColumn(false)]
         public DateTime? CreateDate { get; set; } = DateTime.Now;
-
     }
 }
