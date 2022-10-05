@@ -13,7 +13,7 @@ namespace SMStore.Entities
         public string Email { get; set; }
         [Display(Name = "Telefon")]
         public string? Phone { get; set; }
-        [Display(Name = "Mesaj")]
+        [Display(Name = "Mesaj"), Required(ErrorMessage = "{0} Alanı Boş Geçilemez!")]
         public string Message { get; set; }
         [Display(Name = "Eklenme Tarihi"), ScaffoldColumn(false)]
         public DateTime? CreateDate { get; set; } = DateTime.Now;
