@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SMStore.Data.Configurations;
 using SMStore.Entities;
+using System.Reflection;
 
 namespace SMStore.Data
 {
@@ -42,6 +44,10 @@ namespace SMStore.Data
                     Password = "123"
                 }
                 );
+            // Configurations altındaki class ları burada tanımlamamız gerekiyor.
+            //modelBuilder.ApplyConfiguration(new BrandConfiguration()); // Configuration class larını bu şekilde tek tek çağırabiliriz.
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly()); // Configuration class larını bu şekilde topluca da ekleyebiliyoruz.
+
             base.OnModelCreating(modelBuilder);
         }
     }

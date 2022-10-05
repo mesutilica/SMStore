@@ -1,7 +1,11 @@
+using SMStore.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<DatabaseContext>(); // DbContext i ekliyoruz
 
 var app = builder.Build();
 
