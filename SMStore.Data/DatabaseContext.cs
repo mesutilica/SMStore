@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SMStore.Data.Configurations;
 using SMStore.Entities;
 using System.Reflection;
 
