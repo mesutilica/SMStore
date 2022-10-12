@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using SMStore.Entities;
 using SMStore.Service.Repositories;
@@ -63,9 +62,10 @@ namespace SMStore.WebUI.Areas.Admin.Controllers
         }
 
         // GET: CategoriesController/Edit/5
-        public async Task<ActionResult> EditAsync(int id)
+        public async Task<ActionResult> EditAsync(int? id)
         {
-            var model = await _repository.FindAsync(id);
+            if (id == null) return BadRequest(); // adres çubuğundan id gönderilmemişse geriye bad reauest le geçersiz istek hatası dön
+            var model = await _repository.FindAsync(id.Value); // paremetrede int? id koduyla id yi boş gelebilir yaptığımız için .value ile değerini alıyoruz
             var liste = await _repository.GetAllAsync();
             ViewBag.ParentId = new SelectList(liste, "Id", "Name");
             return View(model);
@@ -74,12 +74,13 @@ namespace SMStore.WebUI.Areas.Admin.Controllers
         // POST: CategoriesController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> EditAsync(int id, Category entity, IFormFile? Image)
+        public async Task<ActionResult> EditAsync(int id, Category entity, IFormFile? Image, bool? resmiSil)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
+                    if (resmiSil == true) entity.Image = string.Empty;
                     if (Image is not null) entity.Image = await FileHelper.FileLoaderAsync(Image);
                     _repository.Update(entity);
                     await _repository.SaveChangesAsync();

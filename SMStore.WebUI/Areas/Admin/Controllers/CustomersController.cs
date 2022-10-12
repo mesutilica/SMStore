@@ -1,43 +1,42 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SMStore.Entities;
 using SMStore.Service.Repositories;
 
 namespace SMStore.WebUI.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class AppUsersController : Controller
+    public class CustomersController : Controller
     {
-        private readonly IRepository<AppUser> _repository; // CRUD işlemleri için gerekli interface
+        private readonly IRepository<Customer> _repository;
 
-        public AppUsersController(IRepository<AppUser> repository)
+        public CustomersController(IRepository<Customer> repository) // D.I
         {
             _repository = repository;
         }
 
-        // GET: AppUsersController
+        // GET: CustomersController
         public async Task<ActionResult> Index()
         {
             var model = await _repository.GetAllAsync();
             return View(model);
         }
 
-        // GET: AppUsersController/Details/5
+        // GET: CustomersController/Details/5
         public ActionResult Details(int id)
         {
             return View();
         }
 
-        // GET: AppUsersController/Create
+        // GET: CustomersController/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: AppUsersController/Create
+        // POST: CustomersController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> CreateAsync(AppUser entity)
+        public async Task<ActionResult> CreateAsync(Customer entity)
         {
             if (ModelState.IsValid)
             {
@@ -49,29 +48,29 @@ namespace SMStore.WebUI.Areas.Admin.Controllers
                 }
                 catch
                 {
-                    ModelState.AddModelError("","Hata Oluştu!");
+                    ModelState.AddModelError("", "Hata Oluştu!");
                 }
             }
             return View();
         }
 
-        // GET: AppUsersController/Edit/5
+        // GET: CustomersController/Edit/5
         public async Task<ActionResult> EditAsync(int id)
         {
             var model = await _repository.FindAsync(id);
             return View(model);
         }
 
-        // POST: AppUsersController/Edit/5
+        // POST: CustomersController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> EditAsync(int id, AppUser appUser)
+        public async Task<ActionResult> EditAsync(int id, Customer entity)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _repository.Update(appUser);
+                    _repository.Update(entity);
                     await _repository.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
                 }
@@ -83,23 +82,23 @@ namespace SMStore.WebUI.Areas.Admin.Controllers
             return View();
         }
 
-        // GET: AppUsersController/Delete/5
+        // GET: CustomersController/Delete/5
         public async Task<ActionResult> DeleteAsync(int id)
         {
             var model = await _repository.FindAsync(id);
             return View(model);
         }
 
-        // POST: AppUsersController/Delete/5
+        // POST: CustomersController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteAsync(int id, AppUser appUser)
+        public async Task<ActionResult> DeleteAsync(int id, Customer entity)
         {
             try
             {
-                _repository.Delete(appUser);
+                _repository.Delete(entity);
                 await _repository.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return RedirectToAction(nameof(Index));
             }
             catch
             {

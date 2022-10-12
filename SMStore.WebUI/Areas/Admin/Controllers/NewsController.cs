@@ -1,77 +1,50 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SMStore.Entities;
 using SMStore.Service.Repositories;
+using SMStore.WebUI.Utils;
 
 namespace SMStore.WebUI.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class AppUsersController : Controller
+    public class NewsController : Controller
     {
-        private readonly IRepository<AppUser> _repository; // CRUD işlemleri için gerekli interface
+        private readonly IRepository<News> _repository;
 
-        public AppUsersController(IRepository<AppUser> repository)
+        public NewsController(IRepository<News> repository)
         {
             _repository = repository;
         }
 
-        // GET: AppUsersController
+        // GET: NewsController
         public async Task<ActionResult> Index()
         {
             var model = await _repository.GetAllAsync();
             return View(model);
         }
 
-        // GET: AppUsersController/Details/5
+        // GET: NewsController/Details/5
         public ActionResult Details(int id)
         {
             return View();
         }
 
-        // GET: AppUsersController/Create
+        // GET: NewsController/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: AppUsersController/Create
+        // POST: NewsController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> CreateAsync(AppUser entity)
+        public async Task<ActionResult> CreateAsync(News entity, IFormFile? Image)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
+                    if (Image is not null) entity.Image = await FileHelper.FileLoaderAsync(Image);
                     await _repository.AddAsync(entity);
-                    await _repository.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
-                }
-                catch
-                {
-                    ModelState.AddModelError("","Hata Oluştu!");
-                }
-            }
-            return View();
-        }
-
-        // GET: AppUsersController/Edit/5
-        public async Task<ActionResult> EditAsync(int id)
-        {
-            var model = await _repository.FindAsync(id);
-            return View(model);
-        }
-
-        // POST: AppUsersController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> EditAsync(int id, AppUser appUser)
-        {
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _repository.Update(appUser);
                     await _repository.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
                 }
@@ -80,26 +53,56 @@ namespace SMStore.WebUI.Areas.Admin.Controllers
                     ModelState.AddModelError("", "Hata Oluştu!");
                 }
             }
-            return View();
+            return View(entity);
         }
 
-        // GET: AppUsersController/Delete/5
+        // GET: NewsController/Edit/5
+        public async Task<ActionResult> EditAsync(int id)
+        {
+            var model = await _repository.FindAsync(id);
+            return View(model);
+        }
+
+        // POST: NewsController/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> EditAsync(int id, News entity, IFormFile? Image, bool? resmiSil)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    if (resmiSil == true) entity.Image = string.Empty;
+                    if (Image is not null) entity.Image = await FileHelper.FileLoaderAsync(Image);
+                    _repository.Update(entity);
+                    await _repository.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch
+                {
+                    ModelState.AddModelError("", "Hata Oluştu!");
+                }
+            }
+            return View(entity);
+        }
+
+        // GET: NewsController/Delete/5
         public async Task<ActionResult> DeleteAsync(int id)
         {
             var model = await _repository.FindAsync(id);
             return View(model);
         }
 
-        // POST: AppUsersController/Delete/5
+        // POST: NewsController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteAsync(int id, AppUser appUser)
+        public ActionResult Delete(int id, News entity)
         {
             try
             {
-                _repository.Delete(appUser);
-                await _repository.SaveChangesAsync();
-                return RedirectToAction("Index");
+                _repository.Delete(entity);
+                _repository.SaveChanges();
+                return RedirectToAction(nameof(Index));
             }
             catch
             {
