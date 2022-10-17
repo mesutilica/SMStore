@@ -7,40 +7,38 @@ using SMStore.WebUI.Utils;
 namespace SMStore.WebUI.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class CategoriesController : Controller
+    public class PostsController : Controller
     {
-        private readonly IRepository<Category> _repository;
+        private readonly IRepository<Post> _repository;
 
-        public CategoriesController(IRepository<Category> repository)
+        public PostsController(IRepository<Post> repository)
         {
             _repository = repository;
         }
 
-        // GET: CategoriesController
+        // GET: PostsController
         public async Task<IActionResult> Index()
         {
             var model = await _repository.GetAllAsync();
             return View(model);
         }
 
-        // GET: CategoriesController/Details/5
+        // GET: PostsController/Details/5
         public ActionResult Details(int id)
         {
             return View();
         }
 
-        // GET: CategoriesController/Create
-        public async Task<ActionResult> CreateAsync()
+        // GET: PostsController/Create
+        public ActionResult Create()
         {
-            var liste = await _repository.GetAllAsync();
-            ViewBag.ParentId = new SelectList(liste, "Id", "Name");
             return View();
         }
 
-        // POST: CategoriesController/Create
+        // POST: PostsController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> CreateAsync(Category entity, IFormFile? Image)
+        public async Task<ActionResult> CreateAsync(Post entity, IFormFile? Image)
         {
             if (ModelState.IsValid)
             {
@@ -56,25 +54,20 @@ namespace SMStore.WebUI.Areas.Admin.Controllers
                     ModelState.AddModelError("", "Hata Oluştu!");
                 }
             }
-            var liste = await _repository.GetAllAsync();
-            ViewBag.ParentId = new SelectList(liste, "Id", "Name");
             return View(entity);
         }
 
-        // GET: CategoriesController/Edit/5
-        public async Task<ActionResult> EditAsync(int? id)
+        // GET: PostsController/Edit/5
+        public async Task<ActionResult> EditAsync(int id)
         {
-            if (id == null) return BadRequest(); // adres çubuğundan id gönderilmemişse geriye bad reauest le geçersiz istek hatası dön
-            var model = await _repository.FindAsync(id.Value); // paremetrede int? id koduyla id yi boş gelebilir yaptığımız için .value ile değerini alıyoruz
-            var liste = await _repository.GetAllAsync();
-            ViewBag.ParentId = new SelectList(liste, "Id", "Name");
+            var model = await _repository.FindAsync(id);
             return View(model);
         }
 
-        // POST: CategoriesController/Edit/5
+        // POST: PostsController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> EditAsync(int id, Category entity, IFormFile? Image, bool? resmiSil)
+        public async Task<ActionResult> EditAsync(int id, Post entity, IFormFile? Image, bool? resmiSil)
         {
             if (ModelState.IsValid)
             {
@@ -91,26 +84,24 @@ namespace SMStore.WebUI.Areas.Admin.Controllers
                     ModelState.AddModelError("", "Hata Oluştu!");
                 }
             }
-            var liste = await _repository.GetAllAsync();
-            ViewBag.ParentId = new SelectList(liste, "Id", "Name");
             return View(entity);
         }
 
-        // GET: CategoriesController/Delete/5
+        // GET: PostsController/Delete/5
         public async Task<ActionResult> DeleteAsync(int id)
         {
             var model = await _repository.FindAsync(id);
             return View(model);
         }
 
-        // POST: CategoriesController/Delete/5
+        // POST: PostsController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteAsync(int id, Category entity)
+        public async Task<IActionResult> DeleteAsync(int id, Post post)
         {
             try
             {
-                _repository.Delete(entity);
+                _repository.Delete(post);
                 await _repository.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }

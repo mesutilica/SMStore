@@ -16,5 +16,17 @@
 
             return fileName; // bu metodun kullanılacağı yere yüklenen dosya adını geri gönderdik
         }
+        public static bool FileRemover(string fileName, string filePath = "/wwwroot/Img/")
+        {
+            string directory = Directory.GetCurrentDirectory() + filePath + fileName;
+
+            if (File.Exists(directory)) // File.Exists metodu c# ta var olan ve kendisine verilen adresteki dosya var mı yok mu kontrol eden metottur.
+            {
+                File.Delete(directory); // File.Delete metodu verilen adresteki dosyayı sunucudan siler
+                return true;
+            }
+
+            return false;
+        }
     }
 }
