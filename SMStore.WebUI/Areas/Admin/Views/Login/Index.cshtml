@@ -1,4 +1,4 @@
-﻿
+﻿@model AdminLoginViewModel
 @{
     Layout = null;
 }
@@ -15,16 +15,16 @@
 <body class="text-center">
 
     <main class="form-signin w-100 m-auto">
-        <form>
-            <img class="mb-4" src="/docs/5.2/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57">
+        <form asp-action="Index">
+            <img class="mb-4" src="/Img/lock-300x300.png" alt="" width="72" height="72">
             <h1 class="h3 mb-3 fw-normal">Admin Login</h1>
-
+            <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-floating">
-                <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+                <input asp-for="Email" type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
                 <label for="floatingInput">Email</label>
             </div>
             <div class="form-floating">
-                <input type="password" class="form-control" id="floatingPassword" placeholder="Şifre">
+                <input asp-for="Password" type="password" class="form-control" id="floatingPassword" placeholder="Şifre">
                 <label for="floatingPassword">Şifre</label>
             </div>
 

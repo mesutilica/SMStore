@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using SMStore.Entities;
 using SMStore.Service.Repositories;
@@ -6,7 +7,7 @@ using SMStore.WebUI.Utils;
 
 namespace SMStore.WebUI.Areas.Admin.Controllers
 {
-    [Area("Admin")]
+    [Area("Admin"), Authorize]// (Policy = "UserPolicy")
     public class CategoriesController : Controller
     {
         private readonly IRepository<Category> _repository;

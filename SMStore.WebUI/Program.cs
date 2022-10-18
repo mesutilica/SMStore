@@ -1,5 +1,10 @@
+using FluentValidation; // FluentValidation ý kullanabilmek için
 using SMStore.Data;
+using SMStore.Entities;
 using SMStore.Service.Repositories;
+using SMStore.Service.ValidationRules;
+using SMStore.WebUI.Models;
+using Microsoft.AspNetCore.Authentication.Cookies; // Authentication kütüphanesini projeye ekliyoruz
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +21,29 @@ builder.Services.AddTransient(typeof(IRepository<>), typeof(Repository<>)); // K
 // 2-AddTransient : Oluþturulmasý istenen nesneden her istek için yeni 1 tane oluþturulur
 // 3-AddScoped : Oluþturulmasý istenen nesne için gelen isteðe bakýlarak nesne daha önceden oluþturulmuþsa onu oluþturulmamýþsa yeni bir tane oluþturup onu gönderir.
 
+// FluentValidation ile class ý kontrol etmek için
+builder.Services.AddScoped<IValidator<AppUser>, AppUserValidator>();
+builder.Services.AddScoped<IValidator<AdminLoginViewModel>, AdminLoginViewModelValidator>();
+// yukarýdaki FluentValidation servislerini ekledikten sonra bu servisi kullanacaðýmýz controller da servisi kullanarak validasyon yapabiliriz
+
+// Admin login oturum açma ayarlarý :
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(x=>
+{
+    x.LoginPath = "/Admin/Login"; // admin paneline girmek isteyen yetkisiz kullanýcýlarý yönlendirir
+    x.AccessDeniedPath = "/AccessDenied"; // yetki kontrolü yaparsak yetkisi olmayanlarý bu sayfaya yönlendirir
+    x.LogoutPath = "/Admin/Logout";
+    x.Cookie.Name = "Admin"; // Oluþacak cookie ye Admin ismini verdirdik
+    x.Cookie.MaxAge = TimeSpan.FromDays(3); // Oluþacak cookie nin yaþam süresi
+    x.Cookie.IsEssential = true;
+});
+
+// Admin login yetkilendirme ayarlarý :
+builder.Services.AddAuthorization(x =>
+{
+    x.AddPolicy("AdminPolicy", p => p.RequireClaim("Role", "Admin")); // Admin yetkisi, bu yetkiye göre kontrol yapacaksak admin controller larda authorize attribute ünde bu yetkiyi eklemeliyiz
+    x.AddPolicy("UserPolicy", p => p.RequireClaim("Role", "User"));
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -31,7 +59,8 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthorization();
+app.UseAuthentication(); // Oturum açma
+app.UseAuthorization(); // Oturum açan kullanýcýyý yetkilendirme
 
 app.MapControllerRoute(
             name: "admin",

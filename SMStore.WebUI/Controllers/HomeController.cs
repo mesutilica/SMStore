@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SMStore.Entities;
+using SMStore.Service.Repositories;
 using SMStore.WebUI.Models;
 using System.Diagnostics;
 
@@ -7,10 +9,11 @@ namespace SMStore.WebUI.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly IRepository<Contact> _repositoryContact;
+        public HomeController(ILogger<HomeController> logger, IRepository<Contact> repositoryContact)
         {
             _logger = logger;
+            _repositoryContact = repositoryContact;
         }
 
         public IActionResult Index()
@@ -20,6 +23,42 @@ namespace SMStore.WebUI.Controllers
 
         public IActionResult Privacy()
         {
+            return View();
+        }
+
+        [Route("AccessDenied")]
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
+
+        [Route("iletisim")]
+        public IActionResult ContactUs()
+        {
+            return View();
+        }
+
+        [Route("iletisim"), HttpPost]
+        public async Task<IActionResult> ContactUsAsync(Contact contact)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await _repositoryContact.AddAsync(contact);
+                    var sonuc = await _repositoryContact.SaveChangesAsync();
+                    if (sonuc > 0)
+                    {
+                        TempData["mesaj"] = "<div class='alert alert-success'>Mesajınız İletilmiştir.. Teşekkür Ederiz...</div>";
+                        return RedirectToAction(nameof(ContactUs));
+                    }
+                }
+                catch
+                {
+                    ModelState.AddModelError("", "Hata Oluştu!");
+                }
+            }
+            
             return View();
         }
 

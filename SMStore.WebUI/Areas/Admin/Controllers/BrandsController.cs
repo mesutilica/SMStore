@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SMStore.Entities;
 using SMStore.Service.Repositories;
 using SMStore.WebUI.Utils;
 
 namespace SMStore.WebUI.Areas.Admin.Controllers
 {
-    [Area("Admin")]
+    [Area("Admin"), Authorize(Policy = "AdminPolicy")] // Authorize özelliğine program.cs de tanımladığımız AdminPolicy i kullanmasını söyledik böylece admin rolünde olmayan yönetici BrandsController daki hiçbir action u çalıştıramaz.
     public class BrandsController : Controller
     {
         private readonly IRepository<Brand> _repository;
