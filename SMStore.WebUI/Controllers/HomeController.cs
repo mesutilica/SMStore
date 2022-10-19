@@ -10,15 +10,23 @@ namespace SMStore.WebUI.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IRepository<Contact> _repositoryContact;
-        public HomeController(ILogger<HomeController> logger, IRepository<Contact> repositoryContact)
+        private readonly IRepository<Slider> _repositorySlider;
+        private readonly IRepository<Product> _repositoryProduct;
+
+        public HomeController(ILogger<HomeController> logger, IRepository<Contact> repositoryContact, IRepository<Slider> repositorySlider, IRepository<Product> repositoryProduct)
         {
             _logger = logger;
             _repositoryContact = repositoryContact;
+            _repositorySlider = repositorySlider;
+            _repositoryProduct = repositoryProduct;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> IndexAsync()
         {
-            return View();
+            var model = new HomePageViewModel();
+            model.Sliders = await _repositorySlider.GetAllAsync();
+            model.Products = await _repositoryProduct.GetAllAsync();
+            return View(model);
         }
 
         public IActionResult Privacy()

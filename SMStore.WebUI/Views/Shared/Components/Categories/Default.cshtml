@@ -1,0 +1,21 @@
+﻿@model IEnumerable<Category>
+
+@{
+    var kategoriler = Model;
+
+    foreach (var kategori in kategoriler.Where(c => c.ParentId == 0 && c.IsActive && c.IsTopMenu))
+    {
+        <div class="dropdown">
+            <a class="btn dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                @kategori.Name
+            </a>
+
+            <ul class="dropdown-menu">
+                @foreach (var altKategori in kategoriler.Where(c => c.ParentId == kategori.Id && c.IsActive && c.IsTopMenu))
+                {
+                    <li><a class="dropdown-item" href="/Categories/Index/@altKategori.Id">@altKategori.Name</a></li>
+                }
+            </ul>
+        </div>
+    }
+}
