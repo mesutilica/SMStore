@@ -15,7 +15,7 @@ namespace SMStore.WebUI.ViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var categories = await _repository.GetAllAsync();
+            var categories = await _repository.GetAllAsync(c => c.IsTopMenu && c.IsActive);
             return View(categories);
         }
     }

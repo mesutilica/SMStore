@@ -25,7 +25,7 @@ namespace SMStore.WebUI.Controllers
         {
             var model = new HomePageViewModel();
             model.Sliders = await _repositorySlider.GetAllAsync();
-            model.Products = await _repositoryProduct.GetAllAsync();
+            model.Products = await _repositoryProduct.GetAllAsync(p => p.IsActive && p.IsHome);
             return View(model);
         }
 
@@ -66,7 +66,7 @@ namespace SMStore.WebUI.Controllers
                     ModelState.AddModelError("", "Hata Oluştu!");
                 }
             }
-            
+
             return View();
         }
 
