@@ -17,10 +17,20 @@ namespace SMStore.WebUI.Controllers
         {
             return View();
         }
+
         public async Task<IActionResult> Detail(int? id)
         {
             if (id is null) return BadRequest();
             var model = await _repository.FindAsync(id.Value);
+            return View(model);
+        }
+
+        public async Task<IActionResult> SearchAsync(string kelime)
+        {
+            var model = await _repository.GetAllAsync(p => p.Name.Contains(kelime) || p.Description.Contains(kelime));
+
+            ViewBag.Baslik = kelime;
+
             return View(model);
         }
     }

@@ -21,6 +21,9 @@ builder.Services.AddTransient(typeof(IRepository<>), typeof(Repository<>)); // K
 // 2-AddTransient : Oluþturulmasý istenen nesneden her istek için yeni 1 tane oluþturulur
 // 3-AddScoped : Oluþturulmasý istenen nesne için gelen isteðe bakýlarak nesne daha önceden oluþturulmuþsa onu oluþturulmamýþsa yeni bir tane oluþturup onu gönderir.
 
+builder.Services.AddScoped(typeof(ICategoryRepository), typeof(CategoryRepository));
+//builder.Services.AddScoped<ICategoryRepository, CategoryRepository>(); // Uygulamaya ICategoryRepository i kullanmak için istek yapýlýrsa CategoryRepository nesnesinden bir örneði kullanýlmak üzere gönder
+
 // FluentValidation ile class ý kontrol etmek için
 builder.Services.AddScoped<IValidator<AppUser>, AppUserValidator>();
 builder.Services.AddScoped<IValidator<AdminLoginViewModel>, AdminLoginViewModelValidator>();
