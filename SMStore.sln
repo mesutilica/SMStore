@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SMStore.Entities", "SMStore
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SMStore.Data", "SMStore.Data\SMStore.Data.csproj", "{06DE8018-2DBA-4628-B071-0B34083EA4E5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SMStore.Service", "SMStore.Service\SMStore.Service.csproj", "{891A6EF8-593E-4917-BF40-542FFFA9D31D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SMStore.Service", "SMStore.Service\SMStore.Service.csproj", "{891A6EF8-593E-4917-BF40-542FFFA9D31D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SMStore.WebAPI", "SMStore.WebAPI\SMStore.WebAPI.csproj", "{869BAFFF-191F-4B0A-8EB3-8C5D4584CAB8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{891A6EF8-593E-4917-BF40-542FFFA9D31D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{891A6EF8-593E-4917-BF40-542FFFA9D31D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{891A6EF8-593E-4917-BF40-542FFFA9D31D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{869BAFFF-191F-4B0A-8EB3-8C5D4584CAB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{869BAFFF-191F-4B0A-8EB3-8C5D4584CAB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{869BAFFF-191F-4B0A-8EB3-8C5D4584CAB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{869BAFFF-191F-4B0A-8EB3-8C5D4584CAB8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

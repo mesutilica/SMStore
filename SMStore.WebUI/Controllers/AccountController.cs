@@ -1,10 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SMStore.Entities;
+using SMStore.Service.Repositories;
 
 namespace SMStore.WebUI.Controllers
 {
     public class AccountController : Controller
     {
+        private readonly IRepository<Customer> _repository;
+
+        public AccountController(IRepository<Customer> repository)
+        {
+            _repository = repository;
+        }
 
         public IActionResult Index()
         {
@@ -18,6 +25,7 @@ namespace SMStore.WebUI.Controllers
         [HttpPost]
         public IActionResult SignIn(string email, string sifre)
         {
+            TempData["mesaj"] = email + " - " + sifre;
             return View();
         }
 
@@ -26,8 +34,21 @@ namespace SMStore.WebUI.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult SignUp(Customer customer)
+        public async Task<IActionResult> SignUpAsync(Customer customer)
         {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await _repository.AddAsync(customer);
+                    await _repository.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch
+                {
+                    ModelState.AddModelError("", "Hata Oluştu!");
+                }
+            }
             return View();
         }
 
