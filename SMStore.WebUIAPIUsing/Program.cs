@@ -1,38 +1,28 @@
-using FluentValidation; // FluentValidation ý kullanabilmek için
+using FluentValidation;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using SMStore.Data;
 using SMStore.Entities;
 using SMStore.Service.Repositories;
 using SMStore.Service.ValidationRules;
-using SMStore.WebUI.Models;
-using Microsoft.AspNetCore.Authentication.Cookies; // Authentication kütüphanesini projeye ekliyoruz
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
 builder.Services.AddSession();
-builder.Services.AddHttpClient();
+builder.Services.AddHttpClient(); // Api mize istek gönderebilmek için gerekli servis!!
 
 builder.Services.AddDbContext<DatabaseContext>(); // DbContext i ekliyoruz
 
-builder.Services.AddTransient(typeof(IRepository<>), typeof(Repository<>)); // Kendi yazdýðýmýz repository servisini burada uygulamaya ekliyoruz. Burada eklemeden projede kullanmaya kalkarsak hata alýrýz!!
-
-// .Net Core ile birlikte 3 farklý Dependency Injection yöntemi var sayýlan olarak kullanýmýmýza sunulmuþtur
-// Dependency Injection Yöntemleri :
-// 1-AddSingleton : Bu yöntemi kullanýrsak oluþturmak istediðimiz nesneden 1 tane oluþturulur ve her isteðimizde bu nesne bize gönderilir
-// 2-AddTransient : Oluþturulmasý istenen nesneden her istek için yeni 1 tane oluþturulur
-// 3-AddScoped : Oluþturulmasý istenen nesne için gelen isteðe bakýlarak nesne daha önceden oluþturulmuþsa onu oluþturulmamýþsa yeni bir tane oluþturup onu gönderir.
+builder.Services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
 
 builder.Services.AddScoped(typeof(ICategoryRepository), typeof(CategoryRepository));
-//builder.Services.AddScoped<ICategoryRepository, CategoryRepository>(); // Uygulamaya ICategoryRepository i kullanmak için istek yapýlýrsa CategoryRepository nesnesinden bir örneði kullanýlmak üzere gönder
 
-// FluentValidation ile class ý kontrol etmek için
 builder.Services.AddScoped<IValidator<AppUser>, AppUserValidator>();
-builder.Services.AddScoped<IValidator<AdminLoginViewModel>, AdminLoginViewModelValidator>();
-// yukarýdaki FluentValidation servislerini ekledikten sonra bu servisi kullanacaðýmýz controller da servisi kullanarak validasyon yapabiliriz
+//builder.Services.AddScoped<IValidator<AdminLoginViewModel>, AdminLoginViewModelValidator>();
 
-// Admin login oturum açma ayarlarý :
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(x=>
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(x =>
 {
     x.LoginPath = "/Admin/Login"; // admin paneline girmek isteyen yetkisiz kullanýcýlarý yönlendirir
     x.AccessDeniedPath = "/AccessDenied"; // yetki kontrolü yaparsak yetkisi olmayanlarý bu sayfaya yönlendirir
@@ -42,7 +32,6 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     x.Cookie.IsEssential = true;
 });
 
-// Admin login yetkilendirme ayarlarý :
 builder.Services.AddAuthorization(x =>
 {
     x.AddPolicy("AdminPolicy", p => p.RequireClaim("Role", "Admin")); // Admin yetkisi, bu yetkiye göre kontrol yapacaksak admin controller larda authorize attribute ünde bu yetkiyi eklemeliyiz
@@ -65,7 +54,7 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthentication(); // Oturum açma
-app.UseAuthorization(); // Oturum açan kullanýcýyý yetkilendirme
+app.UseAuthorization();
 
 app.MapControllerRoute(
             name: "admin",
