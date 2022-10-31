@@ -1,54 +1,50 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using SMStore.Entities;
-using SMStore.WebUIAPIUsing.Utils;
 
 namespace SMStore.WebUIAPIUsing.Areas.Admin.Controllers
 {
     [Area("Admin"), Authorize]
-    public class CategoriesController : Controller
+    public class CustomersController : Controller
     {
         private readonly HttpClient _httpClient;
         private readonly string _apiAdres;
 
-        public CategoriesController(HttpClient httpClient)
+        public CustomersController(HttpClient httpClient)
         {
             _httpClient = httpClient;
-            _apiAdres = "https://localhost:7141/Api/Categories";
+            _apiAdres = "https://localhost:7141/Api/Customers";
         }
 
-        // GET: CategoriesController
+        // GET: CustomersController
         public async Task<ActionResult> IndexAsync()
         {
-            var model = await _httpClient.GetFromJsonAsync<List<Category>>(_apiAdres);
+            var model = await _httpClient.GetFromJsonAsync<List<Customer>>(_apiAdres);
             return View(model);
         }
 
-        // GET: CategoriesController/Details/5
+        // GET: CustomersController/Details/5
         public ActionResult Details(int id)
         {
             return View();
         }
 
-        // GET: CategoriesController/Create
-        public async Task<ActionResult> CreateAsync()
+        // GET: CustomersController/Create
+        public ActionResult Create()
         {
-            var liste = await _httpClient.GetFromJsonAsync<List<Category>>(_apiAdres);
-            ViewBag.ParentId = new SelectList(liste, "Id", "Name");
             return View();
         }
 
-        // POST: CategoriesController/Create
+        // POST: CustomersController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> CreateAsync(Category entity, IFormFile? Image)
+        public async Task<ActionResult> CreateAsync(Customer entity)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    if (Image is not null) entity.Image = await FileHelper.FileLoaderAsync(Image);
                     var response = await _httpClient.PostAsJsonAsync(_apiAdres, entity);
                     if (response.IsSuccessStatusCode)
                         return RedirectToAction(nameof(Index));
@@ -62,25 +58,23 @@ namespace SMStore.WebUIAPIUsing.Areas.Admin.Controllers
             return View();
         }
 
-        // GET: CategoriesController/Edit/5
-        public async Task<IActionResult> EditAsync(int id)
+        // GET: CustomersController/Edit/5
+        public async Task<ActionResult> EditAsync(int id)
         {
-            var model = await _httpClient.GetFromJsonAsync<Category>(_apiAdres + "/" + id);
-            var liste = await _httpClient.GetFromJsonAsync<List<Category>>(_apiAdres);
-            ViewBag.ParentId = new SelectList(liste, "Id", "Name");
+            var model = await _httpClient.GetFromJsonAsync<Customer>(_apiAdres + "/" + id);
+
             return View(model);
         }
 
-        // POST: CategoriesController/Edit/5
+        // POST: CustomersController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> EditAsync(int id, Category entity, IFormFile? Image)
+        public async Task<ActionResult> EditAsync(int id, Customer entity)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    if (Image is not null) entity.Image = await FileHelper.FileLoaderAsync(Image);
                     var response = await _httpClient.PutAsJsonAsync(_apiAdres + "/" + id, entity);
                     if (response.IsSuccessStatusCode)
                         return RedirectToAction(nameof(Index));
@@ -94,14 +88,15 @@ namespace SMStore.WebUIAPIUsing.Areas.Admin.Controllers
             return View();
         }
 
-        // GET: CategoriesController/Delete/5
+        // GET: CustomersController/Delete/5
         public async Task<ActionResult> DeleteAsync(int id)
         {
-            var model = await _httpClient.GetFromJsonAsync<Category>(_apiAdres + "/" + id);
+            var model = await _httpClient.GetFromJsonAsync<Customer>(_apiAdres + "/" + id);
+
             return View(model);
         }
 
-        // POST: CategoriesController/Delete/5
+        // POST: CustomersController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteAsync(int id, IFormCollection collection)

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using SMStore.Entities;
@@ -7,42 +8,49 @@ using SMStore.WebUIAPIUsing.Utils;
 namespace SMStore.WebUIAPIUsing.Areas.Admin.Controllers
 {
     [Area("Admin"), Authorize]
-    public class CategoriesController : Controller
+    public class ProductsController : Controller
     {
         private readonly HttpClient _httpClient;
         private readonly string _apiAdres;
+        private readonly string _apiAdresKategori;
+        private readonly string _apiAdresMarka;
 
-        public CategoriesController(HttpClient httpClient)
+        public ProductsController(HttpClient httpClient)
         {
             _httpClient = httpClient;
-            _apiAdres = "https://localhost:7141/Api/Categories";
+            _apiAdres = "https://localhost:7141/Api/Products";
+            _apiAdresKategori = "https://localhost:7141/Api/Categories";
+            _apiAdresMarka = "https://localhost:7141/Api/Brands";
         }
 
-        // GET: CategoriesController
+        // GET: ProductsController
         public async Task<ActionResult> IndexAsync()
         {
-            var model = await _httpClient.GetFromJsonAsync<List<Category>>(_apiAdres);
+            var model = await _httpClient.GetFromJsonAsync<List<Product>>(_apiAdres);
             return View(model);
         }
 
-        // GET: CategoriesController/Details/5
+        // GET: ProductsController/Details/5
         public ActionResult Details(int id)
         {
             return View();
         }
 
-        // GET: CategoriesController/Create
+        // GET: ProductsController/Create
         public async Task<ActionResult> CreateAsync()
         {
-            var liste = await _httpClient.GetFromJsonAsync<List<Category>>(_apiAdres);
-            ViewBag.ParentId = new SelectList(liste, "Id", "Name");
+            var kategoriler = await _httpClient.GetFromJsonAsync<List<Category>>(_apiAdresKategori);
+            var markalar= await _httpClient.GetFromJsonAsync<List<Brand>>(_apiAdresMarka);
+
+            ViewBag.CategoryId = new SelectList(kategoriler, "Id", "Name");
+            ViewBag.BrandId = new SelectList(markalar, "Id", "Name");
             return View();
         }
 
-        // POST: CategoriesController/Create
+        // POST: ProductsController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> CreateAsync(Category entity, IFormFile? Image)
+        public async Task<ActionResult> CreateAsync(Product entity, IFormFile? Image)
         {
             if (ModelState.IsValid)
             {
@@ -62,19 +70,24 @@ namespace SMStore.WebUIAPIUsing.Areas.Admin.Controllers
             return View();
         }
 
-        // GET: CategoriesController/Edit/5
+        // GET: ProductsController/Edit/5
         public async Task<IActionResult> EditAsync(int id)
         {
-            var model = await _httpClient.GetFromJsonAsync<Category>(_apiAdres + "/" + id);
-            var liste = await _httpClient.GetFromJsonAsync<List<Category>>(_apiAdres);
-            ViewBag.ParentId = new SelectList(liste, "Id", "Name");
+            var model = await _httpClient.GetFromJsonAsync<Product>(_apiAdres + "/" + id);
+
+            var kategoriler = await _httpClient.GetFromJsonAsync<List<Category>>(_apiAdresKategori);
+            var markalar = await _httpClient.GetFromJsonAsync<List<Brand>>(_apiAdresMarka);
+
+            ViewBag.CategoryId = new SelectList(kategoriler, "Id", "Name");
+            ViewBag.BrandId = new SelectList(markalar, "Id", "Name");
+
             return View(model);
         }
 
-        // POST: CategoriesController/Edit/5
+        // POST: ProductsController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> EditAsync(int id, Category entity, IFormFile? Image)
+        public async Task<ActionResult> EditAsync(int id, Product entity, IFormFile? Image)
         {
             if (ModelState.IsValid)
             {
@@ -94,14 +107,14 @@ namespace SMStore.WebUIAPIUsing.Areas.Admin.Controllers
             return View();
         }
 
-        // GET: CategoriesController/Delete/5
+        // GET: ProductsController/Delete/5
         public async Task<ActionResult> DeleteAsync(int id)
         {
-            var model = await _httpClient.GetFromJsonAsync<Category>(_apiAdres + "/" + id);
+            var model = await _httpClient.GetFromJsonAsync<Product>(_apiAdres + "/" + id);
             return View(model);
         }
 
-        // POST: CategoriesController/Delete/5
+        // POST: ProductsController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteAsync(int id, IFormCollection collection)

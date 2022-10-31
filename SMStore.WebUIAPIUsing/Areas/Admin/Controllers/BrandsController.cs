@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SMStore.Entities;
 using SMStore.WebUIAPIUsing.Utils;
 
 namespace SMStore.WebUIAPIUsing.Areas.Admin.Controllers
 {
-    [Area("Admin")]
+    [Area("Admin"), Authorize]
     public class BrandsController : Controller
     {
         private readonly HttpClient _httpClient;

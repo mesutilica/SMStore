@@ -1,48 +1,45 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using SMStore.Entities;
 using SMStore.WebUIAPIUsing.Utils;
 
 namespace SMStore.WebUIAPIUsing.Areas.Admin.Controllers
 {
     [Area("Admin"), Authorize]
-    public class CategoriesController : Controller
+    public class NewsController : Controller
     {
         private readonly HttpClient _httpClient;
         private readonly string _apiAdres;
 
-        public CategoriesController(HttpClient httpClient)
+        public NewsController(HttpClient httpClient)
         {
             _httpClient = httpClient;
-            _apiAdres = "https://localhost:7141/Api/Categories";
+            _apiAdres = "https://localhost:7141/Api/News";
         }
 
-        // GET: CategoriesController
+        // GET: NewsController
         public async Task<ActionResult> IndexAsync()
         {
-            var model = await _httpClient.GetFromJsonAsync<List<Category>>(_apiAdres);
+            var model = await _httpClient.GetFromJsonAsync<List<News>>(_apiAdres);
             return View(model);
         }
 
-        // GET: CategoriesController/Details/5
+        // GET: NewsController/Details/5
         public ActionResult Details(int id)
         {
             return View();
         }
 
-        // GET: CategoriesController/Create
-        public async Task<ActionResult> CreateAsync()
+        // GET: NewsController/Create
+        public ActionResult Create()
         {
-            var liste = await _httpClient.GetFromJsonAsync<List<Category>>(_apiAdres);
-            ViewBag.ParentId = new SelectList(liste, "Id", "Name");
             return View();
         }
 
-        // POST: CategoriesController/Create
+        // POST: NewsController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> CreateAsync(Category entity, IFormFile? Image)
+        public async Task<ActionResult> CreateAsync(News entity, IFormFile? Image)
         {
             if (ModelState.IsValid)
             {
@@ -62,19 +59,18 @@ namespace SMStore.WebUIAPIUsing.Areas.Admin.Controllers
             return View();
         }
 
-        // GET: CategoriesController/Edit/5
+        // GET: NewsController/Edit/5
         public async Task<IActionResult> EditAsync(int id)
         {
-            var model = await _httpClient.GetFromJsonAsync<Category>(_apiAdres + "/" + id);
-            var liste = await _httpClient.GetFromJsonAsync<List<Category>>(_apiAdres);
-            ViewBag.ParentId = new SelectList(liste, "Id", "Name");
+            var model = await _httpClient.GetFromJsonAsync<News>(_apiAdres + "/" + id);
+
             return View(model);
         }
 
-        // POST: CategoriesController/Edit/5
+        // POST: NewsController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> EditAsync(int id, Category entity, IFormFile? Image)
+        public async Task<ActionResult> EditAsync(int id, News entity, IFormFile? Image)
         {
             if (ModelState.IsValid)
             {
@@ -94,14 +90,14 @@ namespace SMStore.WebUIAPIUsing.Areas.Admin.Controllers
             return View();
         }
 
-        // GET: CategoriesController/Delete/5
+        // GET: NewsController/Delete/5
         public async Task<ActionResult> DeleteAsync(int id)
         {
-            var model = await _httpClient.GetFromJsonAsync<Category>(_apiAdres + "/" + id);
+            var model = await _httpClient.GetFromJsonAsync<News>(_apiAdres + "/" + id);
             return View(model);
         }
 
-        // POST: CategoriesController/Delete/5
+        // POST: NewsController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteAsync(int id, IFormCollection collection)
