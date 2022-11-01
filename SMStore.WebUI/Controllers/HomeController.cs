@@ -12,13 +12,15 @@ namespace SMStore.WebUI.Controllers
         private readonly IRepository<Contact> _repositoryContact;
         private readonly IRepository<Slider> _repositorySlider;
         private readonly IRepository<Product> _repositoryProduct;
+        private readonly IRepository<News> _repositoryNews;
 
-        public HomeController(ILogger<HomeController> logger, IRepository<Contact> repositoryContact, IRepository<Slider> repositorySlider, IRepository<Product> repositoryProduct)
+        public HomeController(ILogger<HomeController> logger, IRepository<Contact> repositoryContact, IRepository<Slider> repositorySlider, IRepository<Product> repositoryProduct, IRepository<News> repositoryNews)
         {
             _logger = logger;
             _repositoryContact = repositoryContact;
             _repositorySlider = repositorySlider;
             _repositoryProduct = repositoryProduct;
+            _repositoryNews = repositoryNews;
         }
 
         public async Task<IActionResult> IndexAsync()
@@ -26,6 +28,7 @@ namespace SMStore.WebUI.Controllers
             var model = new HomePageViewModel();
             model.Sliders = await _repositorySlider.GetAllAsync();
             model.Products = await _repositoryProduct.GetAllAsync(p => p.IsActive && p.IsHome);
+            model.News = await _repositoryNews.GetAllAsync(n => n.IsActive);
             return View(model);
         }
 
