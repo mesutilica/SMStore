@@ -13,7 +13,10 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DatabaseContext>(); // DbContext i ekliyoruz
 
 builder.Services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
+
+builder.Services.AddScoped(typeof(IBrandRepository), typeof(BrandRepository));
 builder.Services.AddScoped(typeof(ICategoryRepository), typeof(CategoryRepository));
+builder.Services.AddScoped(typeof(IProductRepository), typeof(ProductRepository));
 
 var app = builder.Build();
 
