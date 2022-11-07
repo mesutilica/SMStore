@@ -16,3 +16,16 @@
         @await Html.PartialAsync("_ProductPartial", item)
     }
 </div>
+
+<hr />
+
+<div class="text-center">
+    <h1 class="display-5">Bizden Haberler</h1>
+</div>
+
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+    @foreach (var item in Model.News)
+    {
+        @await Html.PartialAsync("_NewsPartial", item)
+    }
+</div>

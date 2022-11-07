@@ -1,14 +1,22 @@
-﻿@model Brand
+﻿@model IEnumerable<Brand>
 
 @{
-    ViewData["Title"] = Model.Name;
+    ViewData["Title"] = "Markalar";
 }
 
-<h1>@Model.Name</h1>
+<h1>Markalar</h1>
+
+<p>
+    En iyi markalar, uygun fiyatları ile SM Store'da.
+</p>
 
 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-    @foreach (var item in Model.Products)
+    @foreach (var item in Model)
     {
-        @await Html.PartialAsync("_ProductPartial", item)
+        <div class="col">
+            <a href="/Brands/Detail/@item.Id">
+                <img src="/Img/@item.Image" alt="@item.Name" class="img-fluid" title="@item.Name" />
+            </a>
+        </div>
     }
 </div>

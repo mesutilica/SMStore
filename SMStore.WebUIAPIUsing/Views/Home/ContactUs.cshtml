@@ -58,7 +58,7 @@
 
         <div class="row mt-5 justify-content-center" data-aos="fade-up">
             <div class="col-lg-10">
-                <form action="forms/contact.php" method="post" role="form" class="php-email-form">
+                <form asp-action="ContactUs" method="post" role="form" class="php-email-form">
                     <div class="row">
                         <div class="col-md-6 form-group">
                             <input type="text" name="name" class="form-control" id="name" placeholder="Adınız" required>
@@ -86,3 +86,15 @@
 
     </div>
 </section><!-- End Contact Section -->
+
+@section Scripts{
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <script>
+        function iletisim_formu(){
+            var ad = $("#name").val();
+        }
+
+        iletisim_formu(); // metodu bu şekilde çağırdığımızda  $ is not defined hatası tarayıcı console ekranında çıkarsa jquery kütüphanesi sayfada çağrılmamıştır.
+    </script>
+}

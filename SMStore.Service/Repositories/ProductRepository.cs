@@ -10,6 +10,11 @@ namespace SMStore.Service.Repositories
         {
         }
 
+        public async Task<IEnumerable<Product>> UrunleriKategoriveMarkaylaGetirAsync()
+        {
+            return await _databaseContext.Products.Include(c => c.Brand).Include(c => c.Category).ToListAsync();
+        }
+
         public async Task<Product> UrunuKategoriVeMarkaylaGetir(int productId)
         {
             return await _databaseContext.Products.Include(c => c.Brand).Include(c => c.Category).FirstOrDefaultAsync(c => c.Id == productId);

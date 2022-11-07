@@ -8,9 +8,9 @@ namespace SMStore.WebAPI.Controllers
     [ApiController]
     public class CategoriesController : ControllerBase
     {
-        private readonly IRepository<Category> _repository;
+        private readonly ICategoryRepository _repository;
 
-        public CategoriesController(IRepository<Category> repository)
+        public CategoriesController(ICategoryRepository repository)
         {
             _repository = repository;
         }
@@ -26,7 +26,15 @@ namespace SMStore.WebAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Category>> GetAsync(int id)
         {
-            var data = await _repository.FindAsync(id);
+            var data = await _repository.KategoriyiUrunlerliyleGetir(id);
+            if (data is null) return NotFound();
+            return data;
+        }
+
+        [HttpGet("GetCategoryByProducts/{categoryId}")]
+        public async Task<ActionResult<Category>> GetCategoryByProducts(int categoryId)
+        {
+            var data = await _repository.KategoriyiUrunlerliyleGetir(categoryId);
             if (data is null) return NotFound();
             return data;
         }

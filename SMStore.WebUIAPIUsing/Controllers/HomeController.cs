@@ -43,6 +43,11 @@ namespace SMStore.WebUIAPIUsing.Controllers
         {
             return View();
         }
+        [HttpPost]
+        public IActionResult ContactUs(Contact contact)
+        {
+            return View();
+        }
 
         public IActionResult Privacy()
         {

@@ -8,9 +8,9 @@ namespace SMStore.WebAPI.Controllers
     [ApiController]
     public class BrandsController : ControllerBase
     {
-        private readonly IRepository<Brand> _repository;
+        private readonly IBrandRepository _repository;
 
-        public BrandsController(IRepository<Brand> repository)
+        public BrandsController(IBrandRepository repository)
         {
             _repository = repository;
         }
@@ -26,7 +26,7 @@ namespace SMStore.WebAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Brand>> GetAsync(int id)
         {
-            var data = await _repository.FindAsync(id);
+            var data = await _repository.MarkayiUrunlerliyleGetir(id);
             if (data is null) return NotFound();
             return data;
         }
