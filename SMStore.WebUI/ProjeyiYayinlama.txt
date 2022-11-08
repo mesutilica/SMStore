@@ -1,0 +1,38 @@
+﻿Projeyiy yayına alma
+
+Projemiz bittikten sonra yayınalamak için 1 adet hostinge, 1 adet msssql veritabanına 1 adet de domaine ihtiyacımız var
+
+Hostingde projeyi çalıştırmak için projemizi Publish etmemiz gerekmekte
+
+Publish edilen dosyaları ise bir Ftp programı ile satın aldığımız hosta bağlanarak bilgisayarımzdaki dosyaları sunucuya transfer etmemiz gerekmekte.
+
+Filezilla Ftp programını ücretsiz olarak kullanabilmekteyiz.
+
+Sitesinden Filezilla Client olan programı indirip bilgisayara kuruyoruz.
+
+Filezillayı çalıştırdıktan sonra üst menüdeki Sunucu kutucuğuna host firmasının verdiği sunucu adresini giriyoruz
+
+Kullanıcı adı ve Parola kutucuklarına da host firmasının verdiği bilgileri giriyoruz
+
+Kapı numarası kutucuğu bazı hostlarda gerekebiliyor eğer gerekirse bu alanı girmeliyiz.
+
+Bilgileri girdikten sonra bağlan diyerek sunucuya bağlanıyoruz.
+
+Bağlandıktan sonra Filezilla nın sağ tarafındaki pencere sunucumuz, sol taraftaki pencere kendi bilgisayarımızdır
+
+Sol pencerede uygulama çıktımızın bulunduğu klasörü seçip içindeki dosyaları sürükle bırak yöntemiyle sağ taraftaki penecereye bırakıyoruz. Sonrasında dosya tranfer işlemi başlayacaktır.
+
+---------------------------------------------
+** Projeyi Publish Etme
+
+* Projeyi yayına almak istediğimizde öncelikle yapmamız gereken Data katmanımızdaki veritabanı bilgisini Canlı yani Hosting firmasının veriği veritabanı bilgileriyle değiştirmeliyiz.
+
+* Sonrasında SMStore.WebUI(Hangi projeyi publish etmek isteresek onu-api-apiusing-webuı vb) katmanına sağ tıklayıp Publish menüsüne tıklıyoruz.
+
+* Açılan pencereden Folder seçeneğini seçip Next diyoruz.
+
+* Gelen ekranda uygulama çıktısını nereye almak istersek browse kısmından klasör seçerek işlemi tamamlıyoruz.
+
+* Bu aşamadan sonra seçimlerimiz kaydedilecektir ve sonraki publish işlemlerinde bu ayarlar kullanılarak aynı klasöre otomatik çıktı sağlanır. Eğer istersek ayarları edit menüsünden tekrar farklı bir klasör seçerek değiştrebiliriz.
+
+* 

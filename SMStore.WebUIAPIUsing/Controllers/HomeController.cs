@@ -44,8 +44,27 @@ namespace SMStore.WebUIAPIUsing.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult ContactUs(Contact contact)
+        public async Task<IActionResult> ContactUsAsync(Contact contact)
         {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var response = await _httpClient.PostAsJsonAsync(_apiAdresContact, contact);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        TempData["mesaj"] = "<div class='alert alert-success'>Mesajınız Gönderildi.. Teşekkürler..</div>";
+                        //return Redirect("/Home/ContactUs");
+                        return Created("/Home/ContactUs", contact);
+                    }
+                        
+                    else ModelState.AddModelError("", "Kayıt Başarısız!");
+                }
+                catch
+                {
+                    ModelState.AddModelError("", "Hata Oluştu!");
+                }
+            }
             return View();
         }
 
