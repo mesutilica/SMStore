@@ -35,4 +35,9 @@ Sol pencerede uygulama çıktımızın bulunduğu klasörü seçip içindeki dos
 
 * Bu aşamadan sonra seçimlerimiz kaydedilecektir ve sonraki publish işlemlerinde bu ayarlar kullanılarak aynı klasöre otomatik çıktı sağlanır. Eğer istersek ayarları edit menüsünden tekrar farklı bir klasör seçerek değiştrebiliriz.
 
-* 
+* Bu işlemden sonra karşımıza gelen pencereden Publish butonuna tıklayarak projeyi yayın moduna alabiliriz.
+
+* Publish işleminden sonraki yazılım geliştirmelerinde yayınalayacağımız projeyi sağ tık publish seçeneğinde bu ekran karşımıza gelir sadece publish butonun basmamız yeterli olacaktır.
+
+* Filezilla dan sunucuya bu dosyaları yüklediğimzde uygulamamız çalışacaktır.
+
